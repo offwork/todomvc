@@ -1,35 +1,49 @@
 package main
 
 import (
+	"encoding/json"
+
+	"github.com/gopherjs/gopherjs/js"
+	"github.com/gopherjs/vecty"
+
+	"todomvc/actions"
+	"todomvc/components"
+	"todomvc/dispatcher"
 	"todomvc/store"
 	"todomvc/store/model"
-
-	"github.com/gopherjs/vecty"
-	"github.com/gopherjs/vecty/elem"
 )
 
-type myComponent struct {
-	vecty.Core
-	Items        []*model.Item `vecty:"prop"`
-	newItemTitle string
-}
-
-func (mc *myComponent) Render() vecty.ComponentOrHTML {
-	return elem.Body(
-		elem.Div(
-			vecty.Markup(vecty.Class("my-main-container")),
-			vecty.Text("Hadi LAN!"),
-		),
-	)
-}
-
 func main() {
+	attachLocalStorage()
+
 	vecty.SetTitle("GopherJS • TodoMVC")
 	vecty.AddStylesheet("todomvc/styles/base.css")
 	vecty.AddStylesheet("todomvc/styles/index.css")
 
-	comp := &myComponent{}
-	store.Listeners.Add(comp, func() {})
+	p := &components.PageView{}
+	store.Listeners.Add(p, func() {
+		p.Items = store.Items
+		vecty.Rerender(p)
+	})
+	vecty.RenderBody(p)
+}
 
-	vecty.RenderBody(comp)
+func attachLocalStorage() {
+	store.Listeners.Add(nil, func() {
+		data, err := json.Marshal(store.Items)
+		if err != nil {
+			println("failed to store items: " + err.Error())
+		}
+		js.Global.Get("localStorage").Set("items", string(data))
+	})
+
+	if data := js.Global.Get("localStorage").Get("items"); data != js.Undefined {
+		var items []*model.Item
+		if err := json.Unmarshal([]byte(data.String()), &items); err != nil {
+			println("failed to load items: " + err.Error())
+		}
+		dispatcher.Dispatch(&actions.ReplaceItems{
+			Items: items,
+		})
+	}
 }

@@ -15,10 +15,8 @@ button {
 	font-weight: inherit;
 	color: inherit;
 	-webkit-appearance: none;
-	appearance: none;
 	-webkit-font-smoothing: antialiased;
 	-moz-font-smoothing: antialiased;
-	font-smoothing: antialiased;
 }
 
 body {
@@ -31,7 +29,6 @@ body {
 	margin: 0 auto;
 	-webkit-font-smoothing: antialiased;
 	-moz-font-smoothing: antialiased;
-	font-smoothing: antialiased;
 	font-weight: 300;
 }
 
@@ -101,7 +98,6 @@ input[type="checkbox"] {
 	box-sizing: border-box;
 	-webkit-font-smoothing: antialiased;
 	-moz-font-smoothing: antialiased;
-	font-smoothing: antialiased;
 }
 
 .new-todo {
@@ -185,7 +181,6 @@ label[for='toggle-all'] {
 	margin: auto 0;
 	border: none; /* Mobile Safari */
 	-webkit-appearance: none;
-	appearance: none;
 }
 
 .todo-list li .toggle:after {
@@ -363,7 +358,6 @@ html .clear-completed:active {
 		-webkit-transform: rotate(90deg);
 		transform: rotate(90deg);
 		-webkit-appearance: none;
-		appearance: none;
 	}
 }
 
